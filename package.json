@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "-": "^0.0.1",
+    "axios": "^0.24.0",
+    "create-react-app": "^5.0.0",
+    "express": "^4.17.2",
+    "g": "^2.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
