@@ -31,17 +31,18 @@ function getEvents(req, res) {
 function getEventsAfter(req,res){
     const {data} = req.query
     const newDate = new Date(data)
-    console.log(newDate.toLocaleString()>=newDate.toLocaleString())
+   
     try {
         const filtered = result.filter((item)=>{
-            if(item.date.toLocaleString()<=newDate.toLocaleString()){
-                console.log(newDate.toLocaleString(),item.date.toLocaleString())
+            const currentDate = new Date(item.date)
+            if(currentDate.getTime() >= newDate.getTime()){
+                console.log('currentDate',currentDate)
                 return item
             }
         })
         res.status(200).send({message:filtered})
     } catch (error) {
-        
+        res.status(404).send({message:'Nenhum evento após essa data'})
     }
 
 }
