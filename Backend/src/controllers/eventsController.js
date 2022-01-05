@@ -1,5 +1,6 @@
+const { INSPECT_MAX_BYTES } = require('buffer')
 const fileSystem = require('fs')
-const { getData, createOrUpdateData, findById } = require('../services/services')
+const { getData, createOrUpdateData, findById, formatDate } = require('../services/services')
 const result = JSON.parse(fileSystem.readFileSync('src/database/' + 'events.json', 'utf8'))
 
 function getEvents(req, res) {
@@ -88,19 +89,59 @@ function deleteEvent(req, res) {
 }
 function getEventByUserId(req,res) {
     const { id } = req.params
-    const eventsData = getData('events.json')
-    const userData = getData('users.json')
-    const user = findById(id,userData)
-    const filtered = eventsData.filter((item)=> {
+    try {
         
-    })
-    res.status(200).send({message:filtered})
+        const eventsData = getData('events.json')
+        const userData = getData('users.json')
+        const contains = []
+        for(let j = 0; j<eventsData.length; j++){
+            for(let i = 0; i < eventsData[j].guests.length; i++){
+                if(eventsData[j].guests[i].id == Number(id)){
+                    contains.push(eventsData[j])
+                }
+            }
+        }
+        if(contains=='') return res.status(200).send({message:"Nenhum evento para este usuário"})
+        const user = findById(id,userData)
+        contains.push(user)
+       console.log(contains)
+        res.status(200).send({message:contains})
+    } catch (error) {
+        res.status(404).send({message:error.message})
+    }
+}
+function createNewEvent(req,res) {
+    const { id, name, description, date, eventPlace, guests, owner } = req.body
+    const newDate = new Date(date)
+    console.log( req.body)
+    try {
+        if(!id || !name || !description || !date || !eventPlace || !guests || !owner) throw new Error('Todos os campos devem ser preenchidos')
+        if(typeof(id)!=='number') throw new Error("O Id deve ser um número")
+        if(newDate =='invalid date') throw new Error('error')
+       const guestsId = guests.map(item=>{ return {id:item}})
+        const event = {
+            id: id,
+            name: name,
+            description: description,
+            date: date,
+            eventPlace: eventPlace,
+            guests: guestsId,
+            owner: {id:owner}
+        }
+           const data = getData('events.json')
+           data.push(event)
+           createOrUpdateData('events.json',data)
+            res.status(200).send({message:data})
+    } catch (error) {
+        res.status(400).send({message:error.message})
+    }
 }
 module.exports = {
     getEvents,
     getEventsAfter,
     updateEvent,
     deleteEvent,
-    getEventByUserId
+    getEventByUserId,
+    createNewEvent
 }
 
