@@ -20,7 +20,7 @@ export const StyledForm = styled.form`
 export const StyledInput = styled.input`
     min-width:50%;
 transition:all 1s ease-out;
-    color:white;
+    color:purple;
     margin:0;
     padding:0;
     border:none;

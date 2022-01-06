@@ -1,8 +1,9 @@
 const  express  = require("express")
+const dotenv = require('dotenv')
 const usersRoutes = require("./routes/v1/users.routes.js")
 const eventsRoutes = require("./routes/v1/events.routes.js")
-const port = process.env.PORT || 5000
-
+dotenv.config()
+const port = process.env.PORT || 3333
 const app = express()
 app.use(express.json())
 app.use(usersRoutes)
@@ -12,14 +13,5 @@ app.get('/status',(req,res)=>{
     res.status(200).send({message:`rodando gostosinho na porta ${port}`})
 })
 app.listen(port,()=>{
-    console.log("System verification")
-    setTimeout(() => {
-        console.log("Checking credentials")
-    }, 2000);
-    setTimeout(() => {
-        console.log("Loading informations")
-    }, 3000);
-    setTimeout(() => {
-        console.log(`System running on port ${port}`)
-    }, 4000);
+    console.log(`Rodando na porta ${port}`)
 })

@@ -1,4 +1,3 @@
-const { INSPECT_MAX_BYTES } = require('buffer')
 const fileSystem = require('fs')
 const { getData, createOrUpdateData, findById, formatDate } = require('../services/services')
 const result = JSON.parse(fileSystem.readFileSync('src/database/' + 'events.json', 'utf8'))
@@ -112,12 +111,17 @@ function getEventByUserId(req,res) {
 }
 function createNewEvent(req,res) {
     const { id, name, description, date, eventPlace, guests, owner } = req.body
-    const newDate = new Date(date)
-    console.log( req.body)
     try {
+        const newDate = new Date(date)
+        const day = newDate.getDay()
+        const month = newDate.getMonth()
+        const year = newDate.getFullYear()
+        //validations
+        if(!day || !month || !year) throw new Error('A data deve ser informada no formato mm/dd/aaaa, mês/dia/ano')
         if(!id || !name || !description || !date || !eventPlace || !guests || !owner) throw new Error('Todos os campos devem ser preenchidos')
         if(typeof(id)!=='number') throw new Error("O Id deve ser um número")
-        if(newDate =='invalid date') throw new Error('error')
+       
+        //creating the event object
        const guestsId = guests.map(item=>{ return {id:item}})
         const event = {
             id: id,
@@ -128,10 +132,13 @@ function createNewEvent(req,res) {
             guests: guestsId,
             owner: {id:owner}
         }
+
+            //inserting data in database
            const data = getData('events.json')
            data.push(event)
-           createOrUpdateData('events.json',data)
-            res.status(200).send({message:data})
+           createOrUpdateData('events.json',data) 
+           
+            res.status(200).send({message:'passou'})
     } catch (error) {
         res.status(400).send({message:error.message})
     }
@@ -145,3 +152,19 @@ module.exports = {
     createNewEvent
 }
 
+/**  if(!id || !name || !description || !date || !eventPlace || !guests || !owner) throw new Error('Todos os campos devem ser preenchidos')
+        if(typeof(id)!=='number') throw new Error("O Id deve ser um número")
+       
+       const guestsId = guests.map(item=>{ return {id:item}})
+        const event = {
+            id: id,
+            name: name,
+            description: description,
+            date: date,
+            eventPlace: eventPlace,
+            guests: guestsId,
+            owner: {id:owner}
+        }
+           const data = getData('events.json')
+           data.push(event)
+           createOrUpdateData('events.json',data) */
