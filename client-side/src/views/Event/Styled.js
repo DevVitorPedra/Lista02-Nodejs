@@ -1,9 +1,9 @@
 import styled from "styled-components";
 
-export const StyledEventCard = styled.div`
+export const StyledEventMainCard = styled.div`
 padding:5px;
-    width:220px;
-    height:200px;
+    width:300px;
+    height:100%;
     display:flex;
     flex-direction:column;
     align-items:center;
@@ -13,20 +13,15 @@ padding:5px;
     backdrop-filter: blur(3.4px);
     -webkit-backdrop-filter: blur(6.4px);
     border: 1px solid rgba(255, 255, 255, 0.21);
-    gap:20px;
+    gap:5px;
 
 `
-export const StyledEventName = styled.h3`
-font-size:16px;
+
+export const StyledEventTitle = styled.h2`
+font-size:18px;
 border-bottom:1px solid black;
-
-    
+ 
 `
-export const StyledEventDescription = styled.p`
+export const StyledEventPs = styled.p`
     color:black;
-
 `
-export const StyledEventDate = styled.p`
-    
-`
-

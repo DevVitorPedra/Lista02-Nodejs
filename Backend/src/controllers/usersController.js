@@ -1,12 +1,25 @@
 const fileSystem = require('fs')
 const xlsx = require('xlsx')
-const { getData, createOrUpdateData } = require('../services/services')
+const { getData, createOrUpdateData, findById } = require('../services/services')
 function getUsers(req,res) { 
+
     if(fileSystem.lstatSync('src/database/'+'users.json').isFile()){
         const result = JSON.parse(fileSystem.readFileSync('src/database/'+'users.json','utf8'))
         res.status(200).send(result)
     }
     res.status(500).send({message:"Internal server error"})
+}
+function getUserById(req,res) {
+    const { id } = req.params
+    const usersData = getData('users.json')
+    try {
+        const user = findById(id,usersData)
+        if(!user) throw new Error('ID inexistente')
+        res.status(200).send({message:user})
+        
+    } catch (error) {
+        res.status(400).send({message:error.message})
+    }
 }
 async function createUsersByXLSXFile(req, res) {
     const workbook = await xlsx.read(fileSystem.readFileSync('./uploads/' + req.file.originalname))
@@ -41,5 +54,6 @@ async function createUsersByXLSXFile(req, res) {
 
 module.exports = {
     createUsersByXLSXFile,
+    getUserById,
     getUsers
 }

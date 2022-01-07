@@ -19,6 +19,7 @@ const usersRoutes = express.Router()
 
 
 usersRoutes.get('/users',usersController.getUsers)
+usersRoutes.get('/users/:id',usersController.getUserById)
 usersRoutes.post('/users/users',upload.single('file'),usersController.createUsersByXLSXFile)
 module.exports = usersRoutes
 

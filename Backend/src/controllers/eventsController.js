@@ -28,6 +28,21 @@ function getEvents(req, res) {
     }
 
 }
+function getEvent(req, res) {
+    const { id } = req.params
+    
+    const eventsData = getData('events.json')
+    try {
+            const event = findById(id,eventsData)
+
+         
+            res.status(200).send({ message: event })
+        
+    } catch (error) {
+        res.status(404).send({ message: error.message })
+    }
+
+}
 function getEventsAfter(req, res) {
     const { data } = req.query
     const newDate = new Date(data)
@@ -81,7 +96,7 @@ function deleteEvent(req, res) {
         const index = data.findIndex((item) => item.id === Number(id))
         data.splice(index,1)
         createOrUpdateData('events.json',data)
-        res.status(200).send({ message: data })
+        res.status(200).send({ message: "Evento excluído com sucesso" })
     } catch (error) {
         res.status(400).send({ message: error.message })
     }
@@ -144,6 +159,7 @@ function createNewEvent(req,res) {
     }
 }
 module.exports = {
+    getEvent,
     getEvents,
     getEventsAfter,
     updateEvent,
