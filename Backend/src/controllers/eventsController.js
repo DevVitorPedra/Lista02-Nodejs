@@ -55,6 +55,7 @@ function getEventsAfter(req, res) {
                 return item
             }
         })
+        if(filtered=='') return res.status(200).send({message:'Nenhum evento após essa data'})
         res.status(200).send({ message: filtered })
     } catch (error) {
         res.status(404).send({ message: 'Nenhum evento após essa data' })
@@ -135,7 +136,7 @@ function createNewEvent(req,res) {
         if(!day || !month || !year) throw new Error('A data deve ser informada no formato mm/dd/aaaa, mês/dia/ano')
         if(!id || !name || !description || !date || !eventPlace || !guests || !owner) throw new Error('Todos os campos devem ser preenchidos')
         if(typeof(id)!=='number') throw new Error("O Id deve ser um número")
-       
+       console.log(id,name,description, date,eventPlace,guests,owner)
         //creating the event object
        const guestsId = guests.map(item=>{ return {id:item}})
         const event = {

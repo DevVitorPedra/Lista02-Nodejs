@@ -9,6 +9,7 @@ export default function Header() {
             <MenuBar>
             <Link to={'/login'}><MenuButton>Login</MenuButton></Link>
             <Link to={'/eventos'}><MenuButton>Eventos</MenuButton></Link>  
+            <Link to={'/datas'}><MenuButton>Datas</MenuButton></Link>  
             </MenuBar>
         </HeaderContainer>
     )

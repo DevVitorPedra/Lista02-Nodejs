@@ -68,7 +68,35 @@ export async function deleteById(id, setTemp) {
 
 }
      
- 
+export async function getEventsAfterEspecifiedDate(date,setEvents) {
+    const options = {
+        method: 'GET',
+        url: `http://localhost:5000/events/data?data=${date}`,
+      };
+      
+     await axios.request(options).then(function (response) {
+      setEvents(response.data.message)
+      console.log(response.data.message)
+  }).catch(function (error) {
+      console.error(error);
+  }); 
+}
+ export async function createNewEvent(body,setModal,setTemp) {
+    const options = {
+        headers: {'X-Requested-With': 'XMLHttpRequest'},
+        method: 'POST',
+        url: `http://localhost:5000/events`,
+        data:body
+      };
+      
+     await axios.request(options).then(function (response) {
+     setTemp(response.data.message)
+     setModal(1)
+      console.log(response.data.message)
+  }).catch(function (error) {
+      console.error(error);
+  }); 
+ }
       
 
 
